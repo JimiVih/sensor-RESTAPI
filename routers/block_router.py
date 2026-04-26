@@ -1,10 +1,14 @@
 from fastapi import FastAPI, Depends, status, APIRouter
 from sqlmodel import Session
-from ..db.models import BlockDB, BlockBase
+from ..db.models import BlockDB, BlockBase, SensorDB
 from ..crud import block_crud as crud
 from ..db.database import get_session
 
 router = APIRouter(prefix="/blocks", tags=["blocks"])
+
+@router.get("/list-sensors/from-blockID={blockID}", response_model=list[SensorDB], description="")
+def list_sensors(blockID: str, session: Session = Depends(get_session)):
+    return crud.list_sensors(session, blockID)
 
 @router.post("/add-block/sensorID={sensorID}&blockID={blockID}", response_model=BlockBase, description="")
 def add_block(sensorID: str, blockID: str, session: Session = Depends(get_session)):

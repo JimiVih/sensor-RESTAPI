@@ -80,4 +80,19 @@ def add_sensor(session: Session, sensorID: str, blockID: str):
     session.refresh(_b)
 
     return _b
+
 #Listaa lohkon anturit()
+def list_sensors(session: Session, blockID: str):
+    if not session.exec(select(BlockDB).where(BlockDB.blockID==blockID)).first():
+        raise HTTPException(status_code=404, detail=f"There is no block with blockID: '{blockID}' in the database! Maybe try adding new block with that blockID.")
+    _sensors = session.exec(select(BlockBase).where(BlockBase.blockID==blockID)).all()
+    result = []
+    _sDB = session.exec(select(SensorDB)).all()
+    for _s in _sensors:
+        for _db in _sDB:
+            if _db.sensorID == _s.sensorID:
+                result.append(_db)
+                break
+            else:
+                continue
+    return result
