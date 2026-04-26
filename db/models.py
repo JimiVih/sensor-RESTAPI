@@ -1,8 +1,19 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Column, JSON
 
+
+
+class DataBase(SQLModel):
+    temp: str | None = Field(default=None)
+    date: str | None = Field(default=None)
+    sensor: str
+class DataDB(DataBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+class DataCreate(DataBase):
+    pass
 
 class SensorBase(SQLModel):
     sensorID: str
+    tempData: list[str] | None = Field(default=None, sa_column=Column(JSON))
     status: bool | None = Field(default=False) #Tulisi kysyä jotenkin anturilta
     #Anturilla on oma kuuntelu ja on samassa verkossa servun kanssa
     #Servu (eli tämä restAPI servu), voi kysyä statusta:
@@ -16,14 +27,6 @@ class SensorCreate(SensorBase):
     pass
 class SensorUpdate(SQLModel):
     status: bool | None = Field(default=False)
-
-class DataBase(SQLModel):
-    temp: float | None = Field(default=None)
-    date: str | None = Field(default=None)
-class DataDB(DataBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-class DataCreate(DataBase):
-    pass
 
 class BlockBase(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
