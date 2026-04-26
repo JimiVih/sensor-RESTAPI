@@ -31,6 +31,12 @@ def add_block(session: Session, sensorID: str, blockID: str):
         if session.exec(select(BlockDB).where(BlockDB.blockID==blockID)).first():
             raise HTTPException(status_code=406, detail=f"Block with blockID: '{blockID}' already exist in the database! Please use free blockID.")
         else:
+
+            _list = session.exec(select(BlockBase)).all()
+            for x in _list:
+                if x.sensorID == sensorID:
+                    raise HTTPException(status_code=406, detail=f"Sensor with id: '{sensorID}' already has a block attached to it. Try a different sensor.")
+                    continue
             newBlock = BlockBase
             newBlock.blockID = blockID
             newBlock.sensorID = sensorID
@@ -48,5 +54,30 @@ def add_block(session: Session, sensorID: str, blockID: str):
             return _b
         
 #Lisää anturi lohkoon()
+def add_sensor(session: Session, sensorID: str, blockID: str):
+    if sensorID == None:
+        raise HTTPException(status_code=406, detail="sensorID CANNOT be empty! Please insert a valid sensorID.")
+    if not session.exec(select(SensorDB).where(SensorDB.sensorID==sensorID)).first():
+        raise HTTPException(status_code=404, detail=f"No sensor with ID: '{sensorID}' was found in the database")
+    if not session.exec(select(BlockDB).where(BlockDB.blockID==blockID)).first():
+        raise HTTPException(status_code=404, detail=f"There is no block with blockID: '{blockID}' in the database! Maybe try adding new block with that blockID.")
+    
+    _list = session.exec(select(BlockBase)).all()
+    for x in _list:
+        if x.sensorID == sensorID:
+            raise HTTPException(status_code=406, detail=f"Sensor with id: '{sensorID}' already has a block attached to it. Try a different sensor.")
+        continue
+        
+    
+    newBlock = BlockBase
+    newBlock.sensorID = sensorID
+    newBlock.blockID = blockID
+    newBlock.id = None
 
+    _b = BlockBase.model_validate(newBlock)
+    session.add(_b)
+    session.commit()
+    session.refresh(_b)
+
+    return _b
 #Listaa lohkon anturit()
