@@ -25,10 +25,11 @@ class DataDB(DataBase, table=True):
 class DataCreate(DataBase):
     pass
 
-class BlockBase(SQLModel):
-    sensorID: str
-class BlockDB(BlockBase, table=True):
+class BlockBase(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-class BlockCreate(BlockBase):
-    pass
+    blockID: str
+    sensorID: str
+class BlockDB(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    blockID: str
     
