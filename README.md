@@ -25,5 +25,10 @@ YOU'RE ALL SET!
 
 Troubleshooting
 -
-
+**"`fastapi dev` is not working"** <br/>
+Check the python you are currently using with `which python`
+the output should read something like: `~/sensor-RESTAPI-master/<you_venv_folder>/bin/python` <br/>
+If it reads: `/usr/bin/python` you are not using the virtual environments python, which has access to fastapi and all the other
+libraries you installed at 6) <br/>
+To fix this issue use the command at 5)
 
