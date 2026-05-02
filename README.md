@@ -1,7 +1,7 @@
 Guide to get you started!
 -
 
-!_GOOD TO KNOW BEFORE INSTALLATION_!
+!_GOOD TO KNOW BEFORE INSTALLATION_! \
 -Python version used was 3.13.x
 
 **Installation & Setup**
