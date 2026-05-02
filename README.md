@@ -31,4 +31,5 @@ the output should read something like: `~/sensor-RESTAPI-master/<you_venv_folder
 If it reads: `/usr/bin/python` you are not using the virtual environments python, which has access to fastapi and all the other
 libraries you installed at 6) <br/>
 To fix this issue use the command at 5)
+...
 
